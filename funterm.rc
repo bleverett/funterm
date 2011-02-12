@@ -1,0 +1,124 @@
+/***************************************************************************
+ *   Copyright (C) 2008 by Blake Leverett                                  *
+ *   bleverett@gmail.com
+ *                                                                         *
+ *   FUNterm is free software; you can redistribute it and/or modify       *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>.  *
+ ***************************************************************************/
+
+#include <windows.h>
+#include "funtermres.h"
+
+710 ICON funterm.ico
+720 BITMAP GrnLEDOn.bmp
+721 BITMAP GrnLEDOff.bmp
+722 BITMAP RedLEDOn.bmp
+723 BITMAP RedLEDOff.bmp
+IDMAINMENU MENU
+BEGIN
+    POPUP "&File"
+        BEGIN
+	MENUITEM "Send &File", IDM_SEND
+	MENUITEM "&Save screen", IDM_SAVE
+	MENUITEM "Begin &Logging", IDM_LOG_START
+	MENUITEM "&End Logging", IDM_LOG_END
+        MENUITEM "Exit", IDM_EXIT
+        END
+    POPUP "&Edit"
+	BEGIN
+        MENUITEM "&Copy 	Ctrl-C", IDM_COPY
+	MENUITEM "&Paste	Ctrl-V", IDM_PASTE
+	MENUITEM "Clear Sc&reen", IDM_CLEAR
+        END
+    POPUP "&View"
+	BEGIN
+        MENUITEM "&Binary 	Ctrl-B", IDM_BINARY
+        END
+    POPUP "&Comm"
+        BEGIN
+        MENUITEM "&Config", IDM_CONFIG
+        MENUITEM "&Start/Stop Comm  F10", IDM_STARTCOMM
+        MENUITEM "CR/LF toggle", IDM_CRLF
+        END
+    POPUP "&Help"
+        BEGIN
+        MENUITEM "&About", IDM_ABOUT
+        END
+END
+
+IDPOPUPMENU MENU
+BEGIN
+    POPUP "Popup"
+        BEGIN
+        MENUITEM "Copy",	IDM_COPY
+        MENUITEM "Paste",	IDM_PASTE
+        END
+END
+
+IDACCEL ACCELERATORS
+BEGIN
+    81, IDM_EXIT, VIRTKEY, CONTROL
+    88, IDM_CLEAR, VIRTKEY, CONTROL
+    66, IDM_BINARY, VIRTKEY, CONTROL
+    67, IDM_COPY, VIRTKEY, CONTROL
+    86, IDM_PASTE, VIRTKEY, CONTROL
+    76, IDM_LOG_START, VIRTKEY, CONTROL
+    69, IDM_LOG_END, VIRTKEY, CONTROL
+    VK_F10, IDM_STARTCOMM, VIRTKEY
+END
+
+IDD_ABOUT DIALOG 6, 18, 140, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "About FUNterm"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "OK", IDCANCEL,                  52,  75, 35, 13
+    LTEXT           "FUNterm Ver 1.02",	             102, 10, 10, 100, 12
+    LTEXT           "Written by Blake Leverett",     103, 10, 24, 100, 12
+    LTEXT           "bleverett@gmail.com",             104, 10, 34, 100, 12
+    LTEXT           "Licensed under GPL, V2.",       105, 10, 44, 100, 12
+    LTEXT           "See COPYING for details.",      105, 10, 54, 100, 12
+END
+
+IDD_CONFIG DIALOG 8, 20, 180, 168
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION |
+    WS_SYSMENU
+CAPTION "Config serial port"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "OK", IDOK, 		 80, 148, 40, 15
+    PUSHBUTTON      "Cancel", IDCANCEL, 132, 148, 40, 15
+	LTEXT       "Comm Port", 442, 7, 7, 80, 10
+	LISTBOX     ID_COMPORT, 7, 18, 86, 104, WS_VSCROLL
+    GROUPBOX        "Speed", ID_SPEEDGB, 99, 7, 73, 110, WS_GROUP
+    AUTORADIOBUTTON "300", ID_BAUD, 103, 20, 39, 10
+    AUTORADIOBUTTON "2400", 408, 103, 32, 39, 10
+    AUTORADIOBUTTON "4800", 409, 103, 44, 39, 10
+    AUTORADIOBUTTON "9600", 410, 103, 56, 39, 10
+    AUTORADIOBUTTON "19200", 411, 103, 68, 39, 10
+    AUTORADIOBUTTON "38400", 412, 103, 80, 39, 10
+    AUTORADIOBUTTON "57600", 413, 103, 92, 39, 10
+    AUTORADIOBUTTON "115200", 414, 103, 104, 39, 10
+    AUTOCHECKBOX    "Open port on startup", ID_CBOPEN, 12, 120, 124, 10
+    AUTOCHECKBOX    "Use hardware flow control", ID_CBFLOW, 12, 132, 129, 10
+END
+
+STRINGTABLE
+BEGIN
+    2010, "Get help"
+    2000, "Create, open, save, or print documents"
+    500, "Displays information about this application"
+    300, "Quits this application"
+    210, "Start or stop serial communication"
+    200, "Configures serial port"
+END

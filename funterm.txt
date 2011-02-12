@@ -1,0 +1,20 @@
+FUNterm is a serial port terminal program for Windows.  It offers basic serial functionality, and is meant to be a basic tool for working with serial devices.  It is small, fast, and simple.
+
+Because FUNterm is written using only basic Win32 calls, with no high-level libraries, it works very well under Linux using Wine.
+
+One of the modules in the project can be used to add serial functionality to any GPL'd windows program.
+
+
+Please provide a detailed, accurate, English-language description of
+your project, including technical aspects which cause it to differ
+from similar, existing solutions. This description will not be used as
+a public description of your project.
+
+
+FUNterm is a serial-port terminal program written for windows.  It is written using only Win32 calls, using no special libraries.  As a consequence, it runs cleanly with Wine, making it a useful tool for talking to serial devices under Linux as well as Windows.  In fact, most of its use and development has been with Linux, though it has had extensive use under Windows as well.
+
+The project is complete and ready for release, and is quite simple.  It compiles with MinGW.
+
+One of the modules included is a stand-alone serial-port driver for Windows.  This can be used to add serial connectivity to any open-source Win32 project, with no added library requirements.
+
+The program has been completely documented with Doxygen.

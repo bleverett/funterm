@@ -1,0 +1,11 @@
+New in this release:
+
+Added feature to toggle serial open/close using the F10 key.
+
+Added feature to switch between UNIX/DOS end of line characters.
+
+Also, there is source included in this release.  I build the program
+using the minGW libraries on Linux.  For building on Windows, you have
+to look at the makefile and use whatever compiler you have to do the
+same functions.  Under Cygwin, the makefile _should_ work.
+
