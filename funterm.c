@@ -32,7 +32,7 @@
 #include "serial.h"
 
 /** @file
-    This file is the main module of the project. It contains the code 
+    This file is the main module of the project. It contains the code
     for the user interface and handling the strings that get displayed,
     and every major function of the program.
 
@@ -53,13 +53,13 @@
     @section compiling Compiling
     If you have MinGW loaded, the included Makefile should work.  If you are compiling from
     Windows, you may need to modify the makefile to work with Windows path conventions.
-    
+
     @section features Features
-    - Supports 64 COM ports.
+    - Supports 128 COM ports.
     - Supports escape sequences.  All escape sequences start with the escape character, 0x1B.
       - <b><ESC> T</b> - Clear to end of line.
       - <b><ESC> Y</b> - Clear to end of screen.
-      - <b><ESC> . <i>x</i></b> - Turn cursor on/off.  If <i>x</i> == '0', cursor is off.  
+      - <b><ESC> . <i>x</i></b> - Turn cursor on/off.  If <i>x</i> == '0', cursor is off.
                                  Otherwise, cursor is turned on.
       - <b><ESC> = <i>row col</i></b> - Set cursor position to <i>row, col</i>.  Parameters
                are biased by 0x20 (space character).  For example, to set the column to 40,
@@ -70,7 +70,7 @@
       - <b>Control-Z</b> - Clear screen and home.
 
     @section reg Registry Usage
-    The registry is used so store program settings.  Settings are stored in 
+    The registry is used so store program settings.  Settings are stored in
     HKEY_CURRENT_USER\\Software\\FUNterm.  These parameters are saved:
     - Comm Port
     - Baud rate.
@@ -82,7 +82,7 @@
 
     See Main Page for features.  This file implements all of the terminal functions, except
     for serial connectivity.
-               
+
  */
 
 // Defines:
@@ -178,20 +178,20 @@ void InitializeStatusBar(HWND hwndParent,int nrOfParts)
   int   ptArray[6];   // Array defining the number of parts/sections
   RECT  rect;
   HDC   hDC;
-  
+
   /* Fill in the ptArray...  */
-  
+
   hDC = GetDC(hwndParent);
   GetClientRect(hwndParent, &rect);
   LineLength = (rect.right - rect.left)/CharWd;
-  
+
   ptArray[0] = 46;
   ptArray[1] = 100;
   ptArray[2] = 151;
   ptArray[3] = 194;
   ptArray[4] = 326;
   ptArray[nrOfParts-1] = -1;  // Last part extends to right side of window
-  
+
   ReleaseDC(hwndParent, hDC);
   SendMessage(hWndStatusbar,
               SB_SETPARTS,
@@ -218,7 +218,7 @@ static BOOL CreateSBar(HWND hwndParent,char *initialText,int nrOfParts)
       InitializeStatusBar(hwndParent,nrOfParts);
       return TRUE;
     }
-  
+
   return FALSE;
 }
 
@@ -229,7 +229,7 @@ static BOOL CreateSBar(HWND hwndParent,char *initialText,int nrOfParts)
 static BOOL InitApplication(void)
 {
   WNDCLASSEX wc;
-  
+
   memset(&wc,0,sizeof(WNDCLASSEX));
   wc.cbSize = sizeof(WNDCLASSEX);
   /// Sets main window with parameters CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS
@@ -253,7 +253,7 @@ static BOOL InitApplication(void)
   wc.lpfnWndProc = (WNDPROC)BinWndProc;
   if (!RegisterClassEx(&wc))
     return 0;
-  
+
   return 1;
 }
 
@@ -267,7 +267,7 @@ HWND CreatefuntermWndClassWnd(void)
       WS_CLIPCHILDREN, WS_MAXIMIZEBOX, WS_CAPTION, WS_BORDER, WS_SYSMENU,
       and WS_THICKFRAME.
   */
-  
+
   return CreateWindowEx(0,"funtermWndClass","FUNterm",
                         WS_MINIMIZEBOX|WS_VISIBLE|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_MAXIMIZEBOX|WS_CAPTION|WS_BORDER|WS_SYSMENU|WS_THICKFRAME,
                         CW_USEDEFAULT,0,CW_USEDEFAULT,0,
@@ -343,7 +343,7 @@ void MainWndProc_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         }
         else if (!OpenPort(RegContents.ComPort,
                            BaudRates[RegContents.Baud],
-                           RegContents.HdwFlow, 
+                           RegContents.HdwFlow,
                            hwndMain))
           {
             MessageBox(hwndMain,"Cannot open serial port!\n","Error",MB_OK|MB_ICONSTOP);
@@ -387,7 +387,7 @@ void MainWndProc_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     case IDM_SAVE:
       // save screen data to file
       SaveFile();
-      break; 
+      break;
     case IDM_BINARY:
         // Show binary in new window.
         if (!hwndBin)
@@ -434,7 +434,7 @@ void MainWndProc_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
  */
 LRESULT CALLBACK MainWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 {
-  switch (msg) 
+  switch (msg)
     {
     case WM_SIZE:
       SendMessage(hWndStatusbar,msg,wParam,lParam);
@@ -532,7 +532,7 @@ void SetMinMaxInfo(MINMAXINFO *mmi)
   P.x = 325;
   P.y = 150;
   mmi->ptMinTrackSize = P;
-  
+
 }
 
 /**
@@ -545,7 +545,7 @@ void SetMinMaxInfo(MINMAXINFO *mmi)
    Win32 help file.
    @return Zero on error, nonzero otherwise.
  */
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, 
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, INT nCmdShow)
 {
   MSG msg;
@@ -553,7 +553,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   HDC DC;
   LOGFONT LogFont;
   SIZE Size;
-  
+
   InitCommonControls();
   hInst = hInstance;
   if (!InitApplication())
@@ -561,15 +561,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   hAccelTable = LoadAccelerators(hInst,MAKEINTRESOURCE(IDACCEL));
   if ((hwndMain = CreatefuntermWndClassWnd()) == (HWND)0)
     return 0;
-  
+
   CreateSBar(hwndMain,"",2);
-  
+
   // Load popup menu from resource
   PopupMenu = LoadMenu(hInst,MAKEINTRESOURCE(IDPOPUPMENU));
-  
+
   // read registry contents, config if no reg info found.
   ReadReg();
-  
+
   // Open serial port, fill in status bar
   if (RegContents.OpenOnStart && !OpenPort(RegContents.ComPort,
                                            BaudRates[RegContents.Baud],
@@ -588,12 +588,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       else
         FillInStatus(stOff);
     }
-  
+
   // draw LEDs
   UpdateStatusBar(NULL, 0, SBT_OWNERDRAW);
-  
+
   // init char drawing stuff
-  
+
   DC = GetDC(hwndMain);
   font = GetStockObject(ANSI_FIXED_FONT);
   GetObject(font,sizeof(LOGFONT),&LogFont);
@@ -602,14 +602,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   SelectObject(DC,font);
   GetTextExtentPoint32(DC,"A",1,&Size);
   ReleaseDC(hwndMain,DC);
-  
+
   CharWd = Size.cx;
   CharHt = Size.cy;
-  
+
   ShowWindow(hwndMain,SW_SHOW);
-  while (GetMessage(&msg,NULL,0,0)) 
+  while (GetMessage(&msg,NULL,0,0))
     {
-      if (!TranslateAccelerator(msg.hwnd,hAccelTable,&msg)) 
+      if (!TranslateAccelerator(msg.hwnd,hAccelTable,&msg))
         {
           TranslateMessage(&msg);
           DispatchMessage(&msg);
@@ -627,8 +627,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 void AddChar(char ch)
 {
   unsigned int x;
-  
-  
+
+
   if (EscProg != Idle)    // We're parsing escape sequence
     {
       switch (EscProg)
@@ -681,7 +681,7 @@ void AddChar(char ch)
           return;
         }
     }
-  
+
   switch (ch)
     {
     case (-1):
@@ -742,29 +742,29 @@ void InitCommDialog(HWND wnd)
   HWND Control;
   int i;
   char str[40];
-  
+
   // init com port listbox
   Control = GetDlgItem(wnd, ID_COMPORT);
-  for (i=0;i<64;i++)
+  for (i=0;i<128;i++)
     {
       sprintf(str,"COM%d",i+1);
       SendMessage(Control,LB_ADDSTRING, 0, (long)str);
     }
   SendMessage(Control,LB_SETCURSEL, RegContents.ComPort-1, 0);
-  
-  
+
+
   // init baud rate button
   Control = GetDlgItem(wnd,ID_BAUD+RegContents.Baud);
   SendMessage(Control,BM_SETCHECK,BST_CHECKED,0);
-  
+
   // init auto-open button
   Control = GetDlgItem(wnd,ID_CBOPEN);
   SendMessage(Control,BM_SETCHECK,RegContents.OpenOnStart ? BST_CHECKED : BST_UNCHECKED,0);
-  
+
   // init flow control button
   Control = GetDlgItem(wnd,ID_CBFLOW);
   SendMessage(Control,BM_SETCHECK,RegContents.HdwFlow ? BST_CHECKED : BST_UNCHECKED,0);
-  
+
 }
 
 /**
@@ -780,11 +780,11 @@ void OnConfigComm(HWND wnd)
 
   /// Closes and re-opens serial port if it is already open.
   CloseSerialPort();
-  
+
   // get com port number
   Control = GetDlgItem(wnd,ID_COMPORT);
   RegContents.ComPort = SendMessage(Control, LB_GETCURSEL, 0, 0) + 1;
-  
+
   // read baud rate button
   for (i=0;i<8;i++)
     {
@@ -793,16 +793,16 @@ void OnConfigComm(HWND wnd)
         break;
     }
   RegContents.Baud = i;
-  
+
   /// Saves config settings to registry.
   // auto-open button
   Control = GetDlgItem(wnd,ID_CBOPEN);
   RegContents.OpenOnStart = SendMessage(Control,BM_GETCHECK,0,0);
-  
+
   // init flow control button
   Control = GetDlgItem(wnd,ID_CBFLOW);
   RegContents.HdwFlow = SendMessage(Control,BM_GETCHECK,0,0);
-  
+
   /// Opens the serial port with the new settings.
   PostMessage(hwndMain,WM_COMMAND,IDM_STARTCOMM,0);
 }
@@ -822,11 +822,11 @@ void Paint(HWND wnd)
   HDC DC;
   SIZE Size;
   int i;
-  
+
   // tell statusbar to redraw if nec.
   if (RxFlag || TxFlag)
     UpdateStatusBar(NULL, 0, SBT_OWNERDRAW);
-  
+
   if (IsIconic(wnd))
     {
       // must do begin/end paint or WM_PAINTs will be
@@ -837,10 +837,10 @@ void Paint(HWND wnd)
       SetCursY(Lines,Lines->CursY);
       return; // don't draw on minimized window
     }
-  
+
   BeginPaint(wnd,&ps);
-  
-  /** Painting is done by first drawing the screen to an off-screen bitmap, and 
+
+  /** Painting is done by first drawing the screen to an off-screen bitmap, and
       then copying the bitmap to the terminal control with a BitBlt() command.
       Without this copying, the program flashes horribly.
   */
@@ -850,16 +850,16 @@ void Paint(HWND wnd)
   DC = CreateCompatibleDC(ps.hdc);
   SelectObject(DC,Bmp);
   SelectObject(DC,font);
-  
+
   // clear bitmap
   FillRect(DC,&R,GetStockObject(WHITE_BRUSH));
-  
+
   // draw border around term window.
   GetWindowRect(hWndStatusbar,&T);
   ScreenToClient(wnd,(POINT *)&T);
   R.bottom = T.top;
   DrawEdge(DC,&R,EDGE_SUNKEN,BF_RECT);
-  
+
   // draw lines
   if (Lines->CursX)
     GetTextExtentPoint32(DC,Lines->Lines[Lines->CursY],Lines->CursX,&Size);
@@ -871,7 +871,7 @@ void Paint(HWND wnd)
     ScrnLineCount = R.bottom/Size.cy;       // number of lines on screen
   for(i=TopLine;i<Lines->Count;i++)
     TextOut(DC,Margin,Margin+(i-TopLine)*Size.cy,Lines->Lines[i],strlen(Lines->Lines[i]));
-  
+
   // draw cursor
   if (Lines->Cursor)
     {
@@ -882,21 +882,21 @@ void Paint(HWND wnd)
       MoveToEx(DC,x,y,NULL);
       LineTo(DC,x+CharWd,y);
     }
-  
+
   // draw bitmap to screen
   BitBlt(ps.hdc,0,0,R.right,R.bottom,DC,0,0,SRCCOPY);
-  
+
   DeleteDC(DC);
   DeleteObject(Bmp);
   EndPaint(wnd,&ps);
-  
+
   // force the lines to scroll off screen if nec. (on resize shorter)
   SetCursY(Lines,Lines->CursY);
 }
 
 
 /**
-   Creates and initializes a TLines structure.  Includes the allocation of space for 
+   Creates and initializes a TLines structure.  Includes the allocation of space for
    the array of strings to be displayed.
    @param Count Number of lines to be allocated.
    @return Pointer to new TLines structure.
@@ -910,11 +910,11 @@ TLines *CreateLines(int Count)
   Lines->Count = 0;
   Lines->Capacity = Count;
   Lines->Cursor = TRUE;
-  
+
   // allocate ptr space
   Lines->Lines = malloc(Count*sizeof(void*));
   Lines->LineLen = malloc(Count*sizeof(int *));
-  
+
   // allocate string space
   for (i=0;i<Count;i++)
     {
@@ -922,7 +922,7 @@ TLines *CreateLines(int Count)
       Lines->Lines[i][0] = 0;         // asciiz terminate
       Lines->LineLen[i] = 8;
     }
-  
+
   return Lines;
 }
 
@@ -934,11 +934,11 @@ TLines *CreateLines(int Count)
 void DestroyLines(TLines *Lines)
 {
   int i;
-  
+
   // free strings
   for (i=0;i<Lines->Capacity;i++)
     free(Lines->Lines[i]);
-  
+
   // free pointers
   free(Lines->Lines);
   free(Lines->LineLen);
@@ -955,10 +955,10 @@ void SetCursX(TLines *Lines,int x)
   int y = Lines->CursY;
   char *p = Lines->Lines[y];
   int z;
-  
+
   if (x < 0) return;
   if (x > 300) return;
-  
+
   // expand line if nec.
   if (x+1 >= Lines->LineLen[y])
     {
@@ -966,7 +966,7 @@ void SetCursX(TLines *Lines,int x)
       Lines->Lines[y] = p;
       Lines->LineLen[y] = x+10;
     }
-  
+
   // add spaces if nec.
   z = strlen(p);
   while (z < x)
@@ -974,7 +974,7 @@ void SetCursX(TLines *Lines,int x)
       p[z++] = ' ';
       p[z] = 0;
     }
-  
+
   // redraw if cursor is visible and has moved.
   if ((x != Lines->CursX) && Lines->Cursor)
     InvalidateRect(hwndMain,NULL,FALSE);
@@ -991,10 +991,10 @@ void SetCursX(TLines *Lines,int x)
 void SetCursY(TLines *Lines,int y)
 {
   int NewCap,i;
-  
+
   if (y > 300) return;
   if (y < 0) return;
-  
+
   if (y >= Lines->Capacity)
     {
       // must re-alloc Line list
@@ -1012,17 +1012,17 @@ void SetCursY(TLines *Lines,int y)
       Lines->Capacity = NewCap;
       Lines->Count = y + 1;
     }
-  
+
   // redraw if cursor has moved.
   if ((y != Lines->CursY) && Lines->Cursor)
     InvalidateRect(hwndMain,NULL,FALSE);
   Lines->CursY = y;
-  
+
   // adjust line count
   if (y >= Lines->Count)
     Lines->Count = y + 1;
   SetCursX(Lines,Lines->CursX);   // force Y line to be padded if necessary.
-  
+
   // Remove lines if too many
   if (Lines->Count > ScrnLineCount)
     {
@@ -1057,13 +1057,13 @@ void PushChar(TLines *Lines,char ch)
   // add a char to list of lines
   char *p;
   int x = Lines->CursX;
-  
+
   // add the char
   p = Lines->Lines[Lines->CursY];
   if (!p[x])
     p[x+1] = 0;                             // asciiz terminate
   p[x] = ch;
-  
+
   SetCursX(Lines,Lines->CursX+1);
   if (Lines->CursY >= Lines->Count)
     Lines->Count = Lines->CursY+1;
@@ -1087,14 +1087,14 @@ void ReadReg(void)
 {
   HKEY Key;
   int Size;
-  
+
   // default values
   RegContents.ComPort = 1;
   RegContents.Baud = 3;   // 9600 Baud
   RegContents.OpenOnStart = FIXED_CONFIG_1 ? TRUE : FALSE;
   RegContents.HdwFlow = FALSE;
   RegContents.CrLf = FALSE;
-  
+
   // read params from registry
   if (RegOpenKeyEx(HKEY_CURRENT_USER,"Software\\FUNterm",
                    0,KEY_ALL_ACCESS,&Key) != ERROR_SUCCESS)
@@ -1104,14 +1104,14 @@ void ReadReg(void)
           PostMessage(hwndMain,WM_COMMAND,IDM_CONFIG,0);
       return; // key doesn't exist, use defaults
   }
-  
+
   Size = sizeof(int);
   RegQueryValueEx(Key,"ComPort",0,NULL,(LPBYTE)&RegContents.ComPort,(LPDWORD)&Size);
   RegQueryValueEx(Key,"Baud",0,NULL,(LPBYTE)&RegContents.Baud,(LPDWORD)&Size);
   RegQueryValueEx(Key,"OpenOnStart",0,NULL,(LPBYTE)&RegContents.OpenOnStart,(LPDWORD)&Size);
   RegQueryValueEx(Key,"HdwFlow",0,NULL,(LPBYTE)&RegContents.HdwFlow,(LPDWORD)&Size);
   RegQueryValueEx(Key,"CrLf",0,NULL,(LPBYTE)&RegContents.CrLf,(LPDWORD)&Size);
-  
+
   RegCloseKey(Key);
 }
 
@@ -1122,7 +1122,7 @@ void SaveReg(void)
 {
   HKEY Key;
   int x;
-  
+
   // store all of this in registry
   if (RegCreateKeyEx(HKEY_CURRENT_USER,"Software\\FUNterm",
                      0,0,0,KEY_ALL_ACCESS,NULL,&Key,(LPDWORD)&x) != ERROR_SUCCESS)
@@ -1133,7 +1133,7 @@ void SaveReg(void)
   RegSetValueEx(Key,"OpenOnStart",0,REG_DWORD,(BYTE *)&RegContents.OpenOnStart,sizeof(RegContents.OpenOnStart));
   RegSetValueEx(Key,"HdwFlow",0,REG_DWORD,(BYTE *)&RegContents.HdwFlow,sizeof(RegContents.HdwFlow));
   RegSetValueEx(Key,"CrLf",0,REG_DWORD,(BYTE *)&RegContents.CrLf,sizeof(RegContents.CrLf));
-  
+
   RegCloseKey(Key);
 }
 
@@ -1148,26 +1148,26 @@ void DrawLEDs(DRAWITEMSTRUCT *dis)
   HDC DC;
   HBITMAP RxLed,TxLed;
   BOOL RedrawFlag = RxFlag || TxFlag;
-  
+
   if (dis->hwndItem != hWndStatusbar)
     return;
 
   R = &dis->rcItem;
-  
+
   // draw LEDs on
   RxLed = LoadBitmap(hInst,MAKEINTRESOURCE(RxFlag ? IDB_REDLEDON : IDB_REDLEDOFF));
   TxLed = LoadBitmap(hInst,MAKEINTRESOURCE(TxFlag ? IDB_GRNLEDON : IDB_GRNLEDOFF));
-  
+
   DC = CreateCompatibleDC(dis->hDC);
   SelectObject(DC,RxLed);
   BitBlt(dis->hDC,R->left+23,R->top,15,15,DC,0,0,SRCCOPY);
   SelectObject(DC,TxLed);
   BitBlt(dis->hDC,R->left+5,R->top,15,15,DC,0,0,SRCCOPY);
-  
+
   DeleteDC(DC);
   DeleteObject(TxLed);
   DeleteObject(RxLed);
-  
+
   RxFlag = FALSE;
   TxFlag = FALSE;
 
@@ -1186,7 +1186,7 @@ void FillInStatus(int Status)
   char s[100];
 
   //enum TStatus {stOff,stError,stRunning,stResize};
-  
+
   switch(Status)
     {
     case stOff:
@@ -1227,15 +1227,15 @@ void DrawChar(int x,int y,char ch)
 {
   // draw one char at x and y
   HDC DC;
-  
+
   x = x * CharWd + Margin;
   y = y * CharHt + Margin;
-  
+
   DC = GetDC(hwndMain);
   SelectObject(DC,font);
-  
+
   TextOut(DC,x,y,&ch,1);
-  
+
   ReleaseDC(hwndMain,DC);
 }
 
@@ -1246,12 +1246,12 @@ void DrawChar(int x,int y,char ch)
 void CenterWindow(HWND hwnd)
 {
   RECT WinRect,ScrnRect;
-  
+
   // get window dimensions
   GetWindowRect(hwnd,&WinRect);
   // get screen dimensions
   SystemParametersInfo(SPI_GETWORKAREA,0,&ScrnRect,0);
-  
+
   // calculate window in center of screen
   SetWindowPos(hwnd,0,
                (ScrnRect.right - (WinRect.right - WinRect.left))/2,
@@ -1278,7 +1278,7 @@ void CopyToClipboard(HWND wnd)
   HGLOBAL mem;
   char *p;
   // copies lines to clipboard
-  
+
   // count btyes need to alloc
   for(i=0;i<Lines->Count;i++)
     Count += strlen(Lines->Lines[i]) + 2;   // cr/lf added.
@@ -1292,7 +1292,7 @@ void CopyToClipboard(HWND wnd)
       MessageBox(NULL,"Cannot allocate memory!\n","Error",MB_OK|MB_ICONSTOP);
       return;
     }
-  
+
   for(i=0;i<Lines->Count;i++)
     {
       strcpy(p,Lines->Lines[i]);
@@ -1316,23 +1316,23 @@ void CopyToClipboard(HWND wnd)
 
 /**
    Pastes data from clipboard to serial port.
-   @param wnd Handle to display window.   
+   @param wnd Handle to display window.
 */
 void PasteFromClipboard(HWND wnd)
 {
   HGLOBAL Mem;
   char *buf,*clip,*p;
   int Count;
-  
+
   if (!OpenClipboard(wnd)) return;
   Mem = GetClipboardData(CF_TEXT);
-  
+
   if (!Mem)
     {
       CloseClipboard();
       return;
     }
-  
+
   // copy memory to local buffer
   Count = GlobalSize(Mem);
   if (!Count)
@@ -1345,7 +1345,7 @@ void PasteFromClipboard(HWND wnd)
   CopyMemory(buf,clip,Count);
   GlobalUnlock(Mem);
   CloseClipboard();
-  
+
   // send chars to serial port
   p = buf;
   while(*p)
@@ -1363,7 +1363,7 @@ void PasteFromClipboard(HWND wnd)
 void ShowMenu(HWND wnd)
 {
   POINT P;
-  
+
   GetCursorPos(&P);
   TrackPopupMenuEx(GetSubMenu(PopupMenu,0),TPM_LEFTBUTTON|TPM_RIGHTBUTTON,P.x,P.y,wnd,NULL);
 }
@@ -1375,7 +1375,7 @@ void ShowMenu(HWND wnd)
 void ClearScreen(void)
 {
   int x;
-  
+
   SetCursX(Lines,0);
   SetCursY(Lines,0);
   for(x=0;x<Lines->Count;x++)
@@ -1392,7 +1392,7 @@ void SaveFile(void)
   OPENFILENAME OpenStruct;
   FILE *file;
   int i;
-  
+
   // open file
   memset(&OpenStruct,0,sizeof(OPENFILENAME));
   OpenStruct.lStructSize = sizeof(OPENFILENAME);
@@ -1415,13 +1415,13 @@ void SaveFile(void)
   OpenStruct.lCustData = 0;
   OpenStruct.lpfnHook = NULL;
   OpenStruct.lpTemplateName = NULL;
-  
+
   if (!GetSaveFileName(&OpenStruct))
     {
       MessageBox(NULL,"Can't open file","Error",MB_OK|MB_ICONSTOP);
       return;
     }
-  
+
   // load from file
   file = fopen(FileName,"wb");
   if (!file)
@@ -1429,14 +1429,14 @@ void SaveFile(void)
       MessageBox(NULL,"Can't open file","Error",MB_OK|MB_ICONSTOP);
       return;
     }
-  
+
   // write the screen contents to file
   for (i=0;i<Lines->Count;i++)
     {
       fputs(Lines->Lines[i],file);
       fputs("\n",file);
     }
-    
+
   fclose(file);
 
 }
@@ -1447,10 +1447,10 @@ void SaveFile(void)
 void StartLog(void)
 {
   OPENFILENAME OpenStruct;
-  
+
   if (LogFile)
     return;
-  
+
   // open file
   memset(&OpenStruct,0,sizeof(OPENFILENAME));
   OpenStruct.lStructSize = sizeof(OPENFILENAME);
@@ -1473,13 +1473,13 @@ void StartLog(void)
   OpenStruct.lCustData = 0;
   OpenStruct.lpfnHook = NULL;
   OpenStruct.lpTemplateName = NULL;
-    
+
   if (!GetSaveFileName(&OpenStruct))
     {
       MessageBox(NULL,"Can't open file","Error",MB_OK|MB_ICONSTOP);
       return;
     }
-    
+
   // open file
   LogFile = fopen(FileName,"wb");
   if (!LogFile)
