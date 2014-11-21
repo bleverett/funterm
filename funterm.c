@@ -135,7 +135,7 @@ int TopLine=0;                  ///< Index of first line on screen.
 int ScrnLineCount=1;            ///< Number of lines on the screen.
 TRegContents RegContents;       ///< Global registry stuff.
 /// Supported baud rates (in BPS).
-int BaudRates[8] = {300,2400,4800,9600,19200,38400,57600,115200};
+int BaudRates[8] = {9600,19200,38400,57600,115200,230400,460800,921600};
 char FileName[300];             ///< Filename string used anywhere a filename is needed.
 HMENU PopupMenu=NULL;           ///< Pointer to popup menu.
 int CharWd=5,CharHt=5;          /**< Size of a single character in pixels.
